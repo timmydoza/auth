@@ -6,13 +6,13 @@ var userSchema = new mongoose.Schema({
   password: String
 });
 
-userSchema.hashPassword = function(password) {
+userSchema.methods.hashPassword = function(password) {
   var hashedPassword = this.password = bcrypt.hashSync(password, 8);
   return hashedPassword;
 };
 
-userSchema.comparePassword = function(password) {
+userSchema.methods.comparePassword = function(password) {
   return bcrypt.compareSync(password, this.password);
 };
 
-exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('User', userSchema);
