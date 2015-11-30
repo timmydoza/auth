@@ -18,6 +18,7 @@ userSchema.methods.comparePassword = function(password) {
 
 userSchema.methods.generateToken = function(callback) {
   var id = this._id;
+  console.log(id);
   eat.encode({id: id}, process.env.APPSECRET, callback);
 };
 
