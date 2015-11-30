@@ -1,6 +1,6 @@
 var express = require('express');
 var moviesRouter = express.Router();
-var bodyParser = require('body-parser');
+var bodyParser = require('body-parser').json();
 var Movie = require(__dirname + '/../models/movie');
 
 var handleError = function(err, res) {
@@ -14,7 +14,7 @@ moviesRouter.get('/movies', function(req, res) {
   });
 });
 
-moviesRouter.post('/movies', bodyParser.json(), function(req, res) {
+moviesRouter.post('/movies', bodyParser, function(req, res) {
   var newMovie = new Movie(req.body);
   newMovie.save(function(err, data) {
     if (err) return handleError(err, res);
