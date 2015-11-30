@@ -6,8 +6,8 @@ var bodyParser = require('body-parser');
 var basicHTTP = require(__dirname + '/../lib/basicHTTP');
 
 authRouter.post('/signup', bodyParser.json(), function(req, res) {
-  User.findOne({'username': req.body.username}, function(err, user) {
-    if (user) {
+  User.findOne({'username': req.body.username}, function(err, dbuser) {
+    if (dbuser) {
       return res.send('username already taken');
     } else {
       var user = new User();
@@ -24,7 +24,6 @@ authRouter.post('/signup', bodyParser.json(), function(req, res) {
       });
     }
   });
-
 });
 
 authRouter.get('/signin', basicHTTP, function(req, res) {
