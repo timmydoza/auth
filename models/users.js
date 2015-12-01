@@ -7,11 +7,6 @@ var userSchema = new mongoose.Schema({
   password: String
 });
 
-userSchema.methods.hashPassword = function(password) {
-  var hashedPassword = this.password = bcrypt.hashSync(password, 8);
-  return hashedPassword;
-};
-
 userSchema.methods.hash = function(password, callback) {
   bcrypt.hash(password, 8, function(err, hash) {
     this.password = hash;
@@ -21,10 +16,6 @@ userSchema.methods.hash = function(password, callback) {
 
 userSchema.methods.check = function(password, callback) {
   bcrypt.compare(password, this.password, callback);
-};
-
-userSchema.methods.comparePassword = function(password) {
-  return bcrypt.compareSync(password, this.password);
 };
 
 userSchema.methods.generateToken = function(callback) {
