@@ -172,5 +172,15 @@ describe('the app', function() {
             done();
         });
       });
+      it ('should return a token if login successful', function(done) {
+        chai.request('localhost:3000')
+          .get('/api/signin')
+          .auth('testuser', 'password123')
+          .end(function(err, res) {
+            expect(res.status).to.eql(200);
+            expect(res.body).to.have.property('token');
+            done();
+        });
+      });
     });
 });

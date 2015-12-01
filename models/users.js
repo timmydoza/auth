@@ -12,6 +12,17 @@ userSchema.methods.hashPassword = function(password) {
   return hashedPassword;
 };
 
+userSchema.methods.hash = function(password, callback) {
+  bcrypt.hash(password, 8, function(err, hash) {
+    this.password = hash;
+    callback(err);
+  }.bind(this));
+};
+
+userSchema.methods.check = function(password, callback) {
+  bcrypt.compare(password, this.password, callback);
+};
+
 userSchema.methods.comparePassword = function(password) {
   return bcrypt.compareSync(password, this.password);
 };
