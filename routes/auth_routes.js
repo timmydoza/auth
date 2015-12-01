@@ -33,19 +33,13 @@ authRouter.get('/signin', basicHTTP, function(req, res) {
       User.findOne({'username': req.auth.username}, callback);
     },
     function checkHash(user, callback) {
-      if (!user) {
-        callback(new Error('no user'));
-      } else {
-        this.user = user;
-        user.check(req.auth.password, callback);
-      }
+      if (!user) return callback(new Error('no user'));
+      this.user = user;
+      user.check(req.auth.password, callback);
     },
     function sendToken(correctPassword, callback) {
-      if (!correctPassword) {
-        callback(new Error('incorrect password'));
-      } else {
-        this.user.generateToken(callback);
-      }
+      if (!correctPassword) return callback(new Error('incorrect password'));
+      this.user.generateToken(callback);
     }
   ], function(err, result) {
     if (err) return res.status(401).send('bad login info');
