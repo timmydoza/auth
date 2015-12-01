@@ -8,7 +8,7 @@ var basicHTTP = require(__dirname + '/../lib/basicHTTP');
 authRouter.post('/signup', bodyParser.json(), function(req, res) {
   User.findOne({'username': req.body.username}, function(err, dbuser) {
     if (dbuser) {
-      return res.send('username already taken');
+      return res.status(401).send('username already taken');
     } else {
       var user = new User();
       user.username = req.body.username;
