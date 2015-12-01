@@ -9,16 +9,15 @@ process.env.MONGOLAB_URI = 'mongodb://localhost/movies_test';
 require(__dirname + '/../server');
 
 describe('the app', function() {
-  var token;
-  var badToken = 'DKW2q97ibz+7xc3b6FfBqo6eMMoYRwNtKILweDVN9C5L';
   before(function(done) {
+    this.badToken = 'DKW2q97ibz+7xc3b6FfBqo6eMMoYRwNtKILweDVN9C5L';
     chai.request('localhost:3000')
       .post('/api/signup')
       .send({username: 'testuser', password: 'password123'})
       .end(function(err, res) {
-        token = res.body.token;
+        this.token = res.body.token;
         done();
-      });
+      }.bind(this));
   });
   after(function(done) {
     mongoose.connection.db.dropDatabase(function() {
@@ -27,10 +26,9 @@ describe('the app', function() {
   });
     describe('the movie routes', function() {
       it('should be able to add a movie to the database', function(done) {
-        debugger;
         var testMovie = {
           title: 'test',
-          token: token
+          token: this.token
         };
         chai.request('localhost:3000')
           .post('/api/movies')
@@ -47,7 +45,7 @@ describe('the app', function() {
         var testMovie = {
         year: '1986',
         director: 'Bob Smith',
-        token: token
+        token: this.token
       };
         chai.request('localhost:3000')
           .post('/api/movies')
@@ -65,7 +63,7 @@ describe('the app', function() {
           title: 'testmovie',
           year: nextYear,
           director: 'Bob Smith',
-          token: token
+          token: this.token
         };
         chai.request('localhost:3000')
         .post('/api/movies')
@@ -82,7 +80,7 @@ describe('the app', function() {
         title: 'testmovie',
         year: '1812',
         director: 'Bob Smith',
-        token: token
+        token: this.token
       };
         chai.request('localhost:3000')
         .post('/api/movies')
@@ -121,7 +119,7 @@ describe('the app', function() {
       it('should not be able to add a movie to the database with an incorrect token', function(done) {
         var testMovie = {
           title: 'test',
-          token: badToken
+          token: this.badToken
         };
         chai.request('localhost:3000')
           .post('/api/movies')
